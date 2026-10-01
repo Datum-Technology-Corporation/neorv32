@@ -21,6 +21,11 @@
 # gap, not a neorv32 quirk. So NEORV32_HOME is substituted into a translated
 # copy of the manifest before it is handed to isim-vcom -f.
 #
+# The logical library is `neorv32`, as in ghdl.sh (`--work=neorv32`): every
+# RTL file says `library neorv32;`. iSim refuses a library clause naming a
+# library with nothing behind it, as dsim and GHDL do, so analysing into
+# `work` does not work.
+#
 # Usage: ./isim.sh [--elab]
 #   (no args)  analyse rtl/file_list_core.f only
 #   --elab     analyse, then elaborate neorv32_top (-sir)
@@ -39,10 +44,10 @@ mkdir -p build
 sed "s|\$NEORV32_HOME|$NEORV32_HOME|g" ../rtl/file_list_core.f \
 	> build/isim_file_list_core.f
 
-echo "+ $ISIM_VCOM -work build/isim_work -lib work -f build/isim_file_list_core.f"
-"$ISIM_VCOM" -work build/isim_work -lib work -f build/isim_file_list_core.f
+echo "+ $ISIM_VCOM -work build/isim_work -lib neorv32 -f build/isim_file_list_core.f"
+"$ISIM_VCOM" -work build/isim_work -lib neorv32 -f build/isim_file_list_core.f
 
 if [ "$1" = "--elab" ]; then
-	echo "+ $ISIM_ELAB -work build/isim_work -lib work -top $TOP -sir"
-	"$ISIM_ELAB" -work build/isim_work -lib work -top "$TOP" -sir
+	echo "+ $ISIM_ELAB -work build/isim_work -lib neorv32 -top $TOP -sir"
+	"$ISIM_ELAB" -work build/isim_work -lib neorv32 -top "$TOP" -sir
 fi
