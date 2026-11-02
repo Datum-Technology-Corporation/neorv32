@@ -38,7 +38,7 @@
 #
 # The logical library is `neorv32`, as in ghdl.sh (`--work=neorv32`): every
 # RTL file says `library neorv32;`. iSim refuses a library clause naming a
-# library with nothing behind it, as dsim and GHDL do, so analysing into
+# library with nothing behind it, as GHDL does, so analysing into
 # `work` does not work.
 #
 # Usage: ./isim.sh [--elab | --run]
