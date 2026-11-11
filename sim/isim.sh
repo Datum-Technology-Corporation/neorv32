@@ -9,7 +9,7 @@
 # Three modes:
 #   (no args)  analyse upstream's OWN rtl/file_list_core.f (the core alone,
 #              authoritative and ordered) into the `neorv32` library
-#   --elab     analyse as above, then elaborate neorv32_top (-sir)
+#   --elab     analyse as above, then elaborate and build neorv32_top
 #   --run      analyse EVERY .vhd under ../rtl/core and ../sim -- ghdl.sh's
 #              own `find` set, the testbench and its models included --
 #              elaborate neorv32_tb and RUN it.  The run writes the same
@@ -61,8 +61,8 @@ if [ "$1" = "--run" ]; then
 	find ../rtl/core ../sim -type f -name '*.vhd' | sort > build/isim_file_list_tb.f
 	echo "+ $ISIM_VCOM -work build/isim_work -lib neorv32 -f build/isim_file_list_tb.f"
 	"$ISIM_VCOM" -work build/isim_work -lib neorv32 -f build/isim_file_list_tb.f
-	echo "+ $ISIM_ELAB -work build/isim_work -lib neorv32 -top neorv32_tb -sir"
-	"$ISIM_ELAB" -work build/isim_work -lib neorv32 -top neorv32_tb -sir
+	echo "+ $ISIM_ELAB -work build/isim_work -lib neorv32 -top neorv32_tb"
+	"$ISIM_ELAB" -work build/isim_work -lib neorv32 -top neorv32_tb
 	echo "+ timeout $ISIM_WALL $ISIM -work build/isim_work -lib neorv32 -top neorv32_tb   (wall-clock bound, not --stop-time)"
 	set +e
 	timeout "$ISIM_WALL" "$ISIM" -work build/isim_work -lib neorv32 -top neorv32_tb 2>&1 | tee isim.log
@@ -79,6 +79,6 @@ echo "+ $ISIM_VCOM -work build/isim_work -lib neorv32 -f build/isim_file_list_co
 
 if [ "$1" = "--elab" ]; then
 	TOP="${TOP:-neorv32_top}"
-	echo "+ $ISIM_ELAB -work build/isim_work -lib neorv32 -top $TOP -sir"
-	"$ISIM_ELAB" -work build/isim_work -lib neorv32 -top "$TOP" -sir
+	echo "+ $ISIM_ELAB -work build/isim_work -lib neorv32 -top $TOP"
+	"$ISIM_ELAB" -work build/isim_work -lib neorv32 -top "$TOP"
 fi
